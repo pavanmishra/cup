@@ -1,6 +1,7 @@
 import dispel
 route = dispel.Route()
 
+
 @route('/(.*)')
 class Hello:
 
@@ -8,6 +9,7 @@ class Hello:
     if not name:
       name = 'World'
     return 'Hello, ' + name + '!'
+
 
 app = dispel.application(route.urls, locals())
 app.run()
