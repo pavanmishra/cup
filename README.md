@@ -1,5 +1,35 @@
 dispel -- it's web.py, stupid, but dispelled
 ===
+## A complete dispel app
+```python
+import dispel
+
+def hello(web):
+  return 'Hello, World!'
+
+urls = ('GET', '/hello', hello)
+app = web.application(urls, locals())
+
+if __name__ == '__main__':
+  app.run()
+```
+If python newcomer can get away with __name__ and '__main__', then may be new web programmer can be instructed in 'GET'.
+
+## A sigil and a router for unsuspecting.
+```python
+import dispel
+
+router = dispel.Router()
+
+def hello(web):
+  return 'Hello, World!'
+
+urls = ('GET', '/hello', hello)
+app = web.application(urls, locals())
+
+if __name__ == '__main__':
+  app.run()
+```
 
 ## Dispeak
 
