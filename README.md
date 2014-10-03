@@ -100,7 +100,6 @@ app.run()
 ```python
 import dispel
 
-
 class Hello:
 
   def GET(self, name):
@@ -122,8 +121,8 @@ app.run()
 
 ```python
 import dispel
-route = dispel.Route()
 
+route = dispel.Route()
 
 @route('/(.*)')
 class Hello:
