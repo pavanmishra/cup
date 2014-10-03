@@ -15,21 +15,22 @@ if __name__ == '__main__':
 ```
 If python newcomer can get away with __name__ and '__main__', then may be new web programmer can be instructed in 'GET'.
 
-## A sigil and a router for unsuspecting.
+## A sigil and a router for the unsuspecting.
 ```python
 import dispel
 
 router = dispel.Router()
 
+@router.GET('/hello')
 def hello(web):
   return 'Hello, World!'
 
-urls = ('GET', '/hello', hello)
 app = web.application(urls, locals())
 
 if __name__ == '__main__':
   app.run()
 ```
+He may have not heard of `bottle`, `flask` or the likes.
 
 ## Dispeak
 
