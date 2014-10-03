@@ -1,4 +1,4 @@
-dispel -- alternate web.py interface
+dispel -- it's web.py, stupid, but dispelled
 ===
 
 ## Dispeak
@@ -10,7 +10,7 @@ All the wizard speak is quoted as below.
 
 > Gryffindor vs Slytherin  is a passé, lets Ravenclaw vs Hufflepuff 
 
-`web.py` is a simple and powerful web framework. It strikes a fine balance between do it all vs micro frameworks. Some parts(request/response handling) of it do feel magical, unpythonic some would say. `dispel` is a tiny layer over request/response handling of `web.py`, in doing so it does not affect the `web.py`'s internals, and makes your code look more pythonic.
+`web.py` is a simple and powerful web framework. It strikes a fine balance between do it all vs micro frameworks. Some parts(request/response handling) of it do feel magical, unpythonic some would say. `dispel` is a tiny layer over request/response handling of `web.py`, in doing so it does not affect the `web.py`'s internals, and makes your code look more pythonic. It also adds some of the routing alternatives, which can make it look even better. 
 
 ## How to dispel?
 
