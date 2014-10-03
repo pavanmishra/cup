@@ -23,7 +23,7 @@ You can choose to write your web.py application in on of the following ways.
 
 > stupefy
 
-Possible to define handlers as functions. Definitely clean and ideal way to go.
+Possible to define handlers as functions. Ideal and clean, maybe.
 
 ```python
 def hello(web, name):
@@ -43,7 +43,7 @@ app.run()
 
 > crucio
 
-`dispel` router allows to keep url patterns close to the handlers. Definitely beautiful.
+`dispel` router allows to keep url patterns close to the handlers. Beautiful, maybe.
 
 ```python
 import dispel
@@ -64,7 +64,7 @@ app.run()
 
 > expelliarmus
 
-`dispel` lets you write applications as you have been doing all along in web.py
+`dispel` lets you write applications as you have been doing all along in web.py. Hysterical, maybe.
 
 ```python
 import dispel
@@ -87,7 +87,7 @@ app.run()
 
 > reducto
 
-`dispel` router also lets you bring your url patterns close to `web.py` handlers.
+`dispel` router also lets you bring your url patterns close to `web.py` handlers. Paranoid, definitely.
 
 ```python
 import dispel
