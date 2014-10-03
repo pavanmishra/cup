@@ -1,4 +1,4 @@
-cup
+dispel
 ===
 
-Python web framework dispelling web.py magic
+alternate web.py interface
