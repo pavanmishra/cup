@@ -35,18 +35,30 @@ Even as:
 ```python
 import dispel
 
-class Hello(dispel.ContextResponder):
+class Hello:
   
   def GET(self, name):
     if not name:
       name = 'World'
     return 'Hello, ' + name + '!'
 
-urls = ('GET', '/(.*)', Hello)
-app = dispel.application(*route.urls)
+urls = ('/(.*)', Hello)
+app = dispel.application(urls, locals())
 app.run()
 ```
 And as:
 ```python
+import dispel
+route = dispel.Route()
 
+route('/(.*)')
+class Hello:
+  
+  def GET(self, name):
+    if not name:
+      name = 'World'
+    return 'Hello, ' + name + '!'
+
+app = dispel.application(*route.urls)
+app.run()
 ```
