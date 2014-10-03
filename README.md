@@ -25,7 +25,7 @@ router = dispel.Router()
 def hello(web):
   return 'Hello, World!'
 
-app = web.application(urls, locals())
+app = web.application(router.urls, locals())
 
 if __name__ == '__main__':
   app.run()
@@ -70,7 +70,7 @@ app.run()
 
 ```
 
-###`cup`, pour you some from `flask` or `bottle`
+###`cup`, serve you some `flask` or `bottle`
 
 > crucio
 
