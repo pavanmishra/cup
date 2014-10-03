@@ -1,7 +1,7 @@
-dispel
+dispel -- alternate web.py interface
 ===
 
-alternate web.py interface
+
 
 Lets you write web applications as
 ```python
@@ -18,7 +18,20 @@ app.run()
 ```
 Or as:
 ```python
+import dispel
+
+route = dispel.Route()
+
+route.GET('/(.*)')
+def hello(ctx, name):
+  if not name:
+    name = 'World'
+  return 'Hello, ' + name + '!'
+
+app = dispel.application(*route.urls)
+app.run()
 ```
 Even as:
 ```python
+
 ```
