@@ -26,7 +26,7 @@ You can choose to write your web.py application in on of the following ways.
 Possible to define handlers as functions. Definitely clean and ideal way to go.
 
 ```python
-def hello(ctx, name):
+def hello(web, name):
   if not name:
     name = 'World'
   return 'Hello, ' + name + '!'
@@ -51,7 +51,7 @@ import dispel
 route = dispel.Route()
 
 @route.GET('/(.*)')
-def hello(ctx, name):
+def hello(web, name):
   if not name:
     name = 'World'
   return 'Hello, ' + name + '!'

@@ -57,7 +57,7 @@ def application(urls, env):
       def wrap(_method):
         def wrapped(self, *a, **k): # will have to merge self and ctx soon
           self.__dict__ = dict(self.__dict__.items() + web.ctx.__dict__.items())
-          self.__dict__['ctx'] = web.ctx
+          self.__dict__['web'] = web.ctx
           return _method(self, *a, **k))
         return wrapped
 
