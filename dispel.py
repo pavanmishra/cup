@@ -102,3 +102,9 @@ class Route:
   @property
   def urls(self):
     return self._urls
+
+  def __call__(self, pattern, **k):
+    def _call(c):
+      self._urls += [pattern, c]
+      return c
+    return _call
