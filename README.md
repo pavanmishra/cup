@@ -33,5 +33,20 @@ app.run()
 ```
 Even as:
 ```python
+import dispel
+
+class Hello(dispel.ContextResponder):
+  
+  def GET(self, name):
+    if not name:
+      name = 'World'
+    return 'Hello, ' + name + '!'
+
+urls = ('GET', '/(.*)', Hello)
+app = dispel.application(*route.urls)
+app.run()
+```
+And as:
+```python
 
 ```
