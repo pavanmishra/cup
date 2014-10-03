@@ -1,9 +1,19 @@
 dispel -- alternate web.py interface
 ===
 
+## dispeak
+All the wizard speak is quoted as below.
+> And muggles quoteth not
 
+## How to dispel?
 
-Lets you write web applications as
+You can choose to write your web.py application to one of the following interfaces
+
+> You have several spells to ward of the charm
+
+`dispel`, original inspiration
+> stupefy 
+
 ```python
 def hello(ctx, name):
   if not name:
@@ -16,7 +26,11 @@ import dispel
 app = dispel.application(urls, locals())
 app.run()
 ```
-Or as:
+
+`cup` (in veins of `flask`, `bottle` and friends):
+
+> reducto
+
 ```python
 import dispel
 
@@ -31,7 +45,9 @@ def hello(ctx, name):
 app = dispel.application(*route.urls)
 app.run()
 ```
-Even as:
+`web.py` way, only dispelled(explained below)
+> expelliarmus
+
 ```python
 import dispel
 
@@ -46,7 +62,7 @@ urls = ('/(.*)', Hello)
 app = dispel.application(urls, locals())
 app.run()
 ```
-And as:
+`cork`, you can now flask and bottle your web.py, or rather dispelled one
 ```python
 import dispel
 route = dispel.Route()
