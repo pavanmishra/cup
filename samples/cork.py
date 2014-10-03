@@ -1,7 +1,7 @@
 import dispel
 route = dispel.Route()
 
-route('/(.*)')
+@route('/(.*)')
 class Hello:
 
   def GET(self, name):
@@ -9,5 +9,5 @@ class Hello:
       name = 'World'
     return 'Hello, ' + name + '!'
 
-app = dispel.application(*route.urls)
+app = dispel.application(route.urls, locals())
 app.run()

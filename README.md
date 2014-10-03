@@ -8,9 +8,9 @@ All the wizard speak is quoted as below.
 
 ## Idiomatic or not, pythonic or not, micro or full stack...
 
-> Gryffindor vs Slytherin  is a passé, lets Ravenclaw vs Hufflepuff 
+> Gryffindor vs Slytherin  is a passé, lets Ravenclaw vs Hufflepuff
 
-`web.py` is a simple and powerful web framework. It strikes a fine balance between do it all vs micro frameworks. Some parts(request/response handling) of it do feel magical, unpythonic some would say. `dispel` is a tiny layer over request/response handling of `web.py`, in doing so it does not affect the `web.py`'s internals, and makes your code look more pythonic. It also adds some of the routing alternatives, which can make it look even better. 
+`web.py` is a simple and powerful web framework. It strikes a fine balance between do it all vs micro frameworks. Some parts(request/response handling) of it do feel magical, unpythonic some would say. `dispel` is a tiny layer over request/response handling of `web.py`, in doing so it does not affect the `web.py`'s internals, and makes your code look more pythonic. It also adds some of the routing alternatives, which can make it look even better.
 
 ## How to dispel?
 
@@ -20,7 +20,7 @@ You can choose to write your web.py application in on of the following styles.
 
 `dispel`, it all started with this.
 
-> stupefy 
+> stupefy
 
 ```python
 def hello(ctx, name):
@@ -44,13 +44,13 @@ import dispel
 
 route = dispel.Route()
 
-route.GET('/(.*)')
+@route.GET('/(.*)')
 def hello(ctx, name):
   if not name:
     name = 'World'
   return 'Hello, ' + name + '!'
 
-app = dispel.application(*route.urls)
+app = dispel.application(route.urls, locals())
 app.run()
 ```
 
@@ -62,7 +62,7 @@ app.run()
 import dispel
 
 class Hello:
-  
+
   def GET(self, name):
     if not name:
       name = 'World'
@@ -81,15 +81,15 @@ app.run()
 import dispel
 route = dispel.Route()
 
-route('/(.*)')
+@route('/(.*)')
 class Hello:
-  
+
   def GET(self, name):
     if not name:
       name = 'World'
     return 'Hello, ' + name + '!'
 
-app = dispel.application(*route.urls)
+app = dispel.application(route.urls, locals())
 app.run()
 ```
 

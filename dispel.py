@@ -1,3 +1,4 @@
+from functools import wraps
 import web
 
 def hook_less(app):
@@ -34,3 +35,24 @@ def application(urls, env):
   webapp = web.application(compile_to_webpy(chunk_urls(urls)), env)
   webapp.add_processor(web.loadhook(hook_less(webapp)))
   return webapp
+
+class Route:
+
+  def __init__(self):
+    self._urls = []
+
+  def GET(self, pattern, **k):
+    def _get(f):
+      self._urls += ['GET', pattern, f]
+      return f
+    return _get
+
+  def POST(self, pattern, **k):
+    def _post(f):
+      self._urls += ['POST', pattern, f]
+      return f
+    return _post
+
+  @property
+  def urls(self):
+    return self._urls
