@@ -19,9 +19,11 @@ You can choose to write your web.py application in on of the following ways.
 
 > You have several spells to ward of the charm
 
-##`dispel`, it all started with this.
+###`dispel`, it all started with this.
 
 > stupefy
+
+Possible to define handlers as functions. Definitely clean and ideal way to go.
 
 ```python
 def hello(ctx, name):
@@ -37,9 +39,11 @@ app.run()
 
 ```
 
-##`cup`, pour in the perks from `flask` or `bottle`
+###`cup`, pour you some from `flask` or `bottle`
 
 > crucio
+
+`dispel` router allows to keep url patterns close to the handlers. Definitely beautiful.
 
 ```python
 import dispel
@@ -59,6 +63,8 @@ app.run()
 ##`web.py`, dispelled, ofcourse
 
 > expelliarmus
+
+`dispel` lets you write applications as you have been doing all along in web.py
 
 ```python
 import dispel
@@ -80,6 +86,8 @@ app.run()
 ##`cork`, you can now `flask` and `bottle` your `web.py`
 
 > reducto
+
+`dispel` router also lets you bring your url patterns close to `web.py` handlers.
 
 ```python
 import dispel
