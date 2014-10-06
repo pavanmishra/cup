@@ -1,4 +1,4 @@
-from functools import wraps, partial
+import inspect
 import web
 
 def hook_less(app):
@@ -11,76 +11,62 @@ def hook_less(app):
     web.ctx.data = web.data
   return _hook
 
-def chunk_urls(urls, chunk_length=2):
-  return map(None, *[iter(urls)]*3)
-
-dispel_chunk_urls = partial(chunk_urls, chunk_length=3)
-context_responder_urls = chunk_urls
-
-
-
 def application(urls):
   env = {}
-  def dispel_to_webpy(urls):
 
-    def webpy_handler_class(method, pattern, handler):
-      ''' dispel handler to webpy'''
+  def generate_webpy_from_handler(method, pattern, handler):
+    class Handler:
+      pass
 
-      class WebPy:
-        pass
+    def wrap_request_handler(handler):
+      def wrapped_handler(instance, *a, **k):
+        return handler(instance, *a, **k)
+      return wrapped_handler
 
-      def wrap(_handler):
-        def wrapped(self, *args, **kwargs):
-          self.__dict__ = dict(self.__dict__.items() + web.ctx.__dict__.items())
-          self.__dict__['ctx'] = web.ctx
-          return _handler(self, *args, **kwargs)
-        return wrapped
+    Handler.__dict__[method] = wrap_request_handler(handler)
+    env[handler.__name__] = Handler
+    return pattern, handler.__name__
 
-      handler, handler_name = isinstance(handler, str) and env[handler], handler or handler, handler.__name__
-      WebPy.__dict__[method] = wrap(handler)
-      env[handler_name] = WebPy
-      return pattern, handler_name
+  def generate_webpy_from_handler_class(pattern, _Handler):
+    ''' dispel Handler to webpy '''
 
-    return [component
-            for method, pattern, handler in dispel_chunk_urls(urls)
-            for component in webpy_handler_class(method, pattern, handler) ]
+    class Handler(_Handler):
+      pass
 
-  def context_responder_to_webpy(urls):
+    def wrap(_method):
+      def wrapped(self, *a, **k): # will have to merge self and ctx soon
+        self.__dict__ = dict(self.__dict__.items() + web.ctx.__dict__.items())
+        self.__dict__['web'] = web.ctx
+        return _method(self, *a, **k)
+      return wrapped
 
-    def webpy_handler_class(pattern, Handler):
-      ''' dispel Handler to webpy '''
-      Handler, handler_name = isinstance(Handler, str) and env[Handler], Handler or Handler, Handler.__name__
+    if hasattr(_Handler.__dict__.get('GET'), '__call__'):
+      Handler.GET = wrap(_Handler.GET)
+    if hasattr(_Handler.__dict__.get('POST'), '__call__'):
+      Handler.POST = wrap(_Handler.POST)
+    env[_Handler.__name__] = Handler
+    return pattern, _Handler.__name__
 
-      class WebPy(Handler):
-        pass
+  def handler_for_urls(urls):
+    url_handlers = []
+    while urls:
+      chunk = urls[:3]
+      if chunk[0] not in ('GET', 'POST'):
+        if inspect.isfunction(chunk[1]):
+          pattern, name = generate_webpy_from_handler('GET', chunk[0], chunk[1])
+          urls = urls[2:]
+        else:
+          pattern, name = generate_webpy_from_handler_class(chunk[0], chunk[1])
+          urls = urls[2:]
+      else:
+        pattern, name = generate_webpy_from_handler(chunk[0], chunk[1], chunk[2])
+        urls = urls[3:]
+      url_handlers += [pattern, name]
+    return url_handlers
 
-      def wrap(_method):
-        def wrapped(self, *a, **k): # will have to merge self and ctx soon
-          self.__dict__ = dict(self.__dict__.items() + web.ctx.__dict__.items())
-          self.__dict__['web'] = web.ctx
-          return _method(self, *a, **k))
-        return wrapped
-
-      if hasattr(WebPy.__dict__.get('GET'), '__call__'):
-        WebPy.GET = wrap(WebPy.GET)
-      if hasattr(WebPy.__dict__.get('POST'), '__call__'):
-        WebPy.POST = wrap(WebPy.POST)
-      env[handler_name]=WebPy
-      return pattern, handler_name
-
-
-    return [component
-            for method, pattern, handler in dispel_chunk_urls(urls)
-            for component in webpy_handler_class(method, pattern, handler) ]
-
-  def compile_to_webpy(urls):
-    ''' convert to webpy format '''
-    return urls[0] in ('POST', 'GET') and dispel_to_webpy(urls) or context_responder_urls(urls)
-
-  webapp = web.application(compile_to_webpy(urls), env)
-  webapp.add_processor(web.loadhook(hook_less(webapp)))
-  return webapp
-
+  app = web.application(handler_for_urls(urls), env)
+  app.add_processor(web.loadhook(hook_less(app)))
+  return app
 
 class Route:
 
