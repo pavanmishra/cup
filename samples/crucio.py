@@ -1,6 +1,6 @@
-import dispel
+import cup
 
-route = dispel.Route()
+route = cup.Route()
 
 @route.GET('/(.*)')
 def hello(ctx, name):
@@ -8,6 +8,6 @@ def hello(ctx, name):
     name = 'World'
   return 'Hello, ' + name + '!'
 
-app = dispel.application(route.urls, locals())
+app = cup.application(route.urls, locals())
 app.run()
 

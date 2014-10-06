@@ -1,5 +1,5 @@
-import dispel
-route = dispel.Route()
+import cup
+route = cup.Route()
 
 
 @route('/(.*)')
@@ -11,5 +11,5 @@ class Hello:
     return 'Hello, ' + name + '!'
 
 
-app = dispel.application(route.urls, locals())
+app = cup.application(route.urls, locals())
 app.run()

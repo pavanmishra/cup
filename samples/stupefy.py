@@ -5,6 +5,6 @@ def hello(ctx, name):
 
 urls = ('GET', '/(.*)', hello)
 
-import dispel # importing here, just to emphasize simplicity
-app = dispel.application(urls, locals())
+import cup # importing here, just to emphasize simplicity
+app = cup.application(urls, locals())
 app.run()

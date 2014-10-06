@@ -1,4 +1,4 @@
-import dispel
+import cup
 
 
 class Hello:
@@ -10,6 +10,6 @@ class Hello:
 
 
 urls = ('/(.*)', Hello)
-app = dispel.application(urls, locals())
+app = cup.application(urls, locals())
 app.run()
 
