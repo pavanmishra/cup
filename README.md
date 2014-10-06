@@ -1,4 +1,4 @@
-cup: a pythonic web framework
+cup: a pythonic wrapper around web.py framework
 =====
 
 ## A complete `cup` application
@@ -31,7 +31,7 @@ app = cup.application(urls)
 app.run()
 ```
 
-## `bottle` or `flask` like router application
+## `bottle` or `flask` like routed application
 
 ```python
 import cup

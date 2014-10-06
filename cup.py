@@ -19,8 +19,8 @@ context_responder_urls = chunk_urls
 
 
 
-def application(urls, env):
-
+def application(urls):
+  env = {}
   def dispel_to_webpy(urls):
 
     def webpy_handler_class(method, pattern, handler):
