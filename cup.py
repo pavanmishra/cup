@@ -11,7 +11,7 @@ def hook_less(app):
     web.ctx.data = web.data
   return _hook
 
-def application(urls):
+def application(urls, **k):
   env = {}
 
   def generate_webpy_from_handler(method, pattern, handler):
@@ -20,10 +20,13 @@ def application(urls):
 
     def wrap_request_handler(handler):
       def wrapped_handler(instance, *a, **k):
+        instance.__dict__ = dict(instance.__dict__.items() + web.ctx.__dict__.items())
         return handler(instance, *a, **k)
       return wrapped_handler
-
-    Handler.__dict__[method] = wrap_request_handler(handler)
+    if method is 'BOTH':
+      Handler.__dict__['GET'] = Handler.__dict__['POST'] = wrap_request_handler(handler)
+    else:
+      Handler.__dict__[method] = wrap_request_handler(handler)
     env[handler.__name__] = Handler
     return pattern, handler.__name__
 
@@ -53,7 +56,7 @@ def application(urls):
       chunk = urls[:3]
       if chunk[0] not in ('GET', 'POST'):
         if inspect.isfunction(chunk[1]):
-          pattern, name = generate_webpy_from_handler('GET', chunk[0], chunk[1])
+          pattern, name = generate_webpy_from_handler('BOTH', chunk[0], chunk[1])
           urls = urls[2:]
         else:
           pattern, name = generate_webpy_from_handler_class(chunk[0], chunk[1])
@@ -64,7 +67,7 @@ def application(urls):
       url_handlers += [pattern, name]
     return url_handlers
 
-  app = web.application(handler_for_urls(urls), env)
+  app = web.application(handler_for_urls(urls), env, **k)
   app.add_processor(web.loadhook(hook_less(app)))
   return app
 
