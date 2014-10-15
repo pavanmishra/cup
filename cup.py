@@ -1,15 +1,17 @@
 import inspect
 import web
 
-def hook_less(app):
-  def _hook():
-    if web.config.get('session_store'): web.ctx.session = web.session.Session(app, web.config.session_store)
-    web.ctx.setcookie = web.setcookie
-    web.ctx.cookies = web.cookies
-    web.ctx.input = web.input
-    web.ctx.header = web.header
-    web.ctx.data = web.data
-  return _hook
+web_api = {
+  'seeother': web.seeother,
+  'setcookie': web.setcookie,
+  'cookies': web.cookies,
+  'input': web.input,
+  'header': web.header,
+  'data': web.data,
+}
+
+def session_store_not_configured(self):
+  raise Exception('Session Store not configured')
 
 def application(urls, **k):
   env = {}
@@ -18,9 +20,11 @@ def application(urls, **k):
     class Handler:
       pass
 
+    Handler.session = property(session_store_not_configured)
     def wrap_request_handler(handler):
       def wrapped_handler(instance, *a, **k):
-        instance.__dict__ = dict(instance.__dict__.items() + web.ctx.__dict__.items())
+        instance.__dict__ = dict(instance.__dict__.items() + web.ctx.__dict__.items() + web_api.items())
+        if web.config.get('session_store'): instance.session = session
         return handler(instance, *a, **k)
       return wrapped_handler
     if method is 'BOTH':
@@ -35,10 +39,10 @@ def application(urls, **k):
 
     class Handler(_Handler):
       pass
-
+    Handler.session = property(session_store_not_configured)
     def wrap(_method):
       def wrapped(self, *a, **k): # will have to merge self and ctx soon
-        self.__dict__ = dict(self.__dict__.items() + web.ctx.__dict__.items())
+        self.__dict__ = dict(self.__dict__.items() + web.ctx.__dict__.items() + web_api.items())
         self.__dict__['web'] = web.ctx
         return _method(self, *a, **k)
       return wrapped
@@ -68,7 +72,7 @@ def application(urls, **k):
     return url_handlers
 
   app = web.application(handler_for_urls(urls), env, **k)
-  app.add_processor(web.loadhook(hook_less(app)))
+  session = web.config.get('session_store') and web.session.Session(app, web.config.session_store) or {}
   return app
 
 class Route:
