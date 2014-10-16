@@ -1,29 +1,39 @@
+__all__ = ['config', 'db', 'template', 'form', 'application', 'Route',
+           'debugerror','http', 'httpserver', 'net', 'utils']
+
 import inspect
 import web
 
-web_api = {
-  'seeother': web.seeother,
-  'setcookie': web.setcookie,
-  'cookies': web.cookies,
-  'input': web.input,
-  'header': web.header,
-  'data': web.data,
-}
+config = web.config
+db = web.db
+template = web.template
+form = web.form
+debugerror = web.debugerror
+http = web.http
+httpserver = web.httpserver
+net = web.net
+utils = web.utils
+
+web_api = web.webapi.__dict__
 
 def session_store_not_configured(self):
   raise Exception('Session Store not configured')
 
 def application(urls, **k):
+  ''' a web.py application generator '''
   env = {}
 
   def generate_webpy_from_handler(method, pattern, handler):
     class Handler:
       pass
-
+    # raises exception to inform that session store is not configured
     Handler.session = property(session_store_not_configured)
+
     def wrap_request_handler(handler):
+      ''' takes a cup method and returns web.py handler '''
       def wrapped_handler(instance, *a, **k):
-        instance.__dict__ = dict(instance.__dict__.items() + web.ctx.__dict__.items() + web_api.items())
+        ''' a handler GET or POST or BOTH method'''
+        instance.__dict__ = dict( web.ctx.__dict__.items() + web_api.items() + instance.__dict__.items())
         if web.config.get('session_store'): instance.session = session
         return handler(instance, *a, **k)
       return wrapped_handler
@@ -35,7 +45,7 @@ def application(urls, **k):
     return pattern, handler.__name__
 
   def generate_webpy_from_handler_class(pattern, _Handler):
-    ''' dispel Handler to webpy '''
+    ''' cup Handler to webpy handler'''
 
     class Handler(_Handler):
       pass
